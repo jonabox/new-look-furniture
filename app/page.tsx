@@ -42,11 +42,7 @@ export default function Home() {
       observer.disconnect();
     };
   }, []);
-
-  const handleSubmit = () => {
-    setFormSubmitted(true);
-    setTimeout(() => setFormSubmitted(false), 3000);
-  };
+ 
 
   return (
     <>
