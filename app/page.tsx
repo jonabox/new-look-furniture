@@ -1,10 +1,16 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+type GalleryImage = {
+  src: string;
+  label: string;
+};
 
 export default function Home() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   useEffect(() => {
     let mx = 0, my = 0, rx = 0, ry = 0;
 
@@ -36,6 +42,23 @@ export default function Home() {
       { threshold: 0.15 }
     );
     reveals.forEach((el) => observer.observe(el));
+
+    fetch("/api/images")
+      .then((res) => res.ok ? res.json() : [])
+      .then((data: GalleryImage[]) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setGalleryImages(data);
+        } else {
+          setGalleryImages([
+            { src: "/gallery/placeholder.svg", label: "Foto pendiente" },
+          ]);
+        }
+      })
+      .catch(() => {
+        setGalleryImages([
+          { src: "/gallery/placeholder.svg", label: "Foto pendiente" },
+        ]);
+      });
 
     return () => {
       document.removeEventListener("mousemove", moveCursor);
@@ -139,6 +162,43 @@ export default function Home() {
         </div>
       </section>
 
+      {/* GALLERY */}
+      <section id="gallery">
+        <div className="gallery-header">
+          <div className="section-label reveal" style={{ justifyContent: "center" }}>— Nuestro Trabajo —</div>
+          <h2 className="reveal reveal-delay-1">Arte que <em>habla</em><br />por sí mismo</h2>
+          <div className="divider-ornament reveal reveal-delay-2">
+            <span /><i>✦</i><span />
+          </div>
+          <p className="gallery-subtitle reveal reveal-delay-3">
+            Cada pieza restaurada guarda una historia. Aquí, algunas de las transformaciones que hemos tenido el privilegio de realizar.
+          </p>
+        </div>
+        <div className="masonry-grid">
+          {galleryImages.map((item, i) => {
+            const heights = ["tall", "short", "medium"];
+            const h = heights[i % heights.length];
+            return (
+            <div className={`masonry-item masonry-${h}`} key={item.src}>
+              <img
+                className="masonry-image"
+                src={item.src}
+                alt={`${item.label} restaurado por New Look Furniture`}
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.src = "/gallery/placeholder.svg";
+                }}
+              />
+              <div className="masonry-overlay">
+                <span className="masonry-cat">Restauracion</span>
+                <div className="masonry-label">{item.label}</div>
+                <span className="masonry-year">New Look Furniture</span>
+              </div>
+            </div>
+          )})}
+        </div>
+      </section>
+
       {/* SERVICES */}
       <section id="services">
         <div className="services-header">
@@ -161,43 +221,6 @@ export default function Home() {
               <div className="service-title">{s.title}</div>
               <p className="service-desc">{s.desc}</p>
               <span className="service-tag">{s.tag}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* GALLERY */}
-      <section id="gallery">
-        <div className="gallery-header">
-          <div className="section-label reveal" style={{ justifyContent: "center" }}>— Nuestro Trabajo —</div>
-          <h2 className="reveal reveal-delay-1">Arte que <em>habla</em><br />por sí mismo</h2>
-          <div className="divider-ornament reveal reveal-delay-2">
-            <span /><i>✦</i><span />
-          </div>
-          <p className="gallery-subtitle reveal reveal-delay-3">
-            Cada pieza restaurada guarda una historia. Aquí, algunas de las transformaciones que hemos tenido el privilegio de realizar.
-          </p>
-        </div>
-        <div className="masonry-grid">
-          {[
-            { h: "tall",   label: "Sillón Victoriano",   year: "2023", cat: "Tapicería · Madera" },
-            { h: "short",  label: "Mesa de Comedor",      year: "2022", cat: "Ebanistería" },
-            { h: "medium", label: "Mecedora de Caoba",    year: "2024", cat: "Madera · Rattan" },
-            { h: "short",  label: "Vitrina Antigua",      year: "2023", cat: "Vidrio · Madera" },
-            { h: "tall",   label: "Ropero Colonial",      year: "2022", cat: "Ebanistería · Metal" },
-            { h: "medium", label: "Silla de Rejilla",     year: "2024", cat: "Rejilla · Madera" },
-            { h: "short",  label: "Cómoda Art Déco",      year: "2023", cat: "Madera · Dorado" },
-            { h: "medium", label: "Butaca de Biblioteca", year: "2024", cat: "Tapicería · Nogal" },
-            { h: "tall",   label: "Escritorio Antiguo",   year: "2022", cat: "Ebanistería Fina" },
-          ].map((item, i) => (
-            <div className={`masonry-item masonry-${item.h} reveal reveal-delay-${i % 4}`} key={i}>
-              {/* Replace the div below with an <img> tag pointing to your photo */}
-              <div className="masonry-placeholder" />
-              <div className="masonry-overlay">
-                <span className="masonry-cat">{item.cat}</span>
-                <div className="masonry-label">{item.label}</div>
-                <span className="masonry-year">{item.year}</span>
-              </div>
             </div>
           ))}
         </div>

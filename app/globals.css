@@ -350,26 +350,19 @@ nav::before {
   border: 1px solid rgba(201,151,58,0.1);
 }
 .masonry-item:hover .masonry-overlay { opacity: 1; }
-.masonry-item:hover .masonry-placeholder { transform: scale(1.04); }
+.masonry-item:hover .masonry-image { transform: scale(1.04); }
 
 /* Heights — adjust freely */
-.masonry-tall   .masonry-placeholder { height: 420px; }
-.masonry-medium .masonry-placeholder { height: 280px; }
-.masonry-short  .masonry-placeholder { height: 200px; }
+.masonry-tall   .masonry-image { height: 420px; }
+.masonry-medium .masonry-image { height: 280px; }
+.masonry-short  .masonry-image { height: 200px; }
 
-.masonry-placeholder {
+.masonry-image {
   width: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
   transition: transform 0.6s ease;
-  /* ── REPLACE THIS BLOCK with an <img> tag ── */
-  background:
-    repeating-linear-gradient(
-      135deg,
-      transparent,
-      transparent 3px,
-      rgba(201,151,58,0.04) 3px,
-      rgba(201,151,58,0.04) 6px
-    ),
-    linear-gradient(160deg, #3d2010 0%, #6b3520 40%, #4a2e1a 70%, #2a1a0e 100%);
 }
 
 .masonry-overlay {
