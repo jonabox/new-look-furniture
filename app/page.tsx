@@ -54,10 +54,10 @@ export default function Home() {
       <nav>
         <div className="nav-logo">New Look Furniture</div>
         <ul className="nav-links">
-          {["legacy", "services", "clients", "contact"].map((id) => (
+          {["legacy", "services", "gallery", "clients", "contact"].map((id) => (
             <li key={id}>
               <a href={`#${id}`} onClick={(e) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); }}>
-                {{ legacy: "Legado", services: "Servicios", clients: "Clientes", contact: "Contacto" }[id]}
+                {{ legacy: "Legado", services: "Servicios", gallery: "Galería", clients: "Clientes", contact: "Contacto" }[id]}
               </a>
             </li>
           ))}
@@ -161,6 +161,43 @@ export default function Home() {
               <div className="service-title">{s.title}</div>
               <p className="service-desc">{s.desc}</p>
               <span className="service-tag">{s.tag}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* GALLERY */}
+      <section id="gallery">
+        <div className="gallery-header">
+          <div className="section-label reveal" style={{ justifyContent: "center" }}>— Nuestro Trabajo —</div>
+          <h2 className="reveal reveal-delay-1">Arte que <em>habla</em><br />por sí mismo</h2>
+          <div className="divider-ornament reveal reveal-delay-2">
+            <span /><i>✦</i><span />
+          </div>
+          <p className="gallery-subtitle reveal reveal-delay-3">
+            Cada pieza restaurada guarda una historia. Aquí, algunas de las transformaciones que hemos tenido el privilegio de realizar.
+          </p>
+        </div>
+        <div className="masonry-grid">
+          {[
+            { h: "tall",   label: "Sillón Victoriano",   year: "2023", cat: "Tapicería · Madera" },
+            { h: "short",  label: "Mesa de Comedor",      year: "2022", cat: "Ebanistería" },
+            { h: "medium", label: "Mecedora de Caoba",    year: "2024", cat: "Madera · Rattan" },
+            { h: "short",  label: "Vitrina Antigua",      year: "2023", cat: "Vidrio · Madera" },
+            { h: "tall",   label: "Ropero Colonial",      year: "2022", cat: "Ebanistería · Metal" },
+            { h: "medium", label: "Silla de Rejilla",     year: "2024", cat: "Rejilla · Madera" },
+            { h: "short",  label: "Cómoda Art Déco",      year: "2023", cat: "Madera · Dorado" },
+            { h: "medium", label: "Butaca de Biblioteca", year: "2024", cat: "Tapicería · Nogal" },
+            { h: "tall",   label: "Escritorio Antiguo",   year: "2022", cat: "Ebanistería Fina" },
+          ].map((item, i) => (
+            <div className={`masonry-item masonry-${item.h} reveal reveal-delay-${i % 4}`} key={i}>
+              {/* Replace the div below with an <img> tag pointing to your photo */}
+              <div className="masonry-placeholder" />
+              <div className="masonry-overlay">
+                <span className="masonry-cat">{item.cat}</span>
+                <div className="masonry-label">{item.label}</div>
+                <span className="masonry-year">{item.year}</span>
+              </div>
             </div>
           ))}
         </div>
